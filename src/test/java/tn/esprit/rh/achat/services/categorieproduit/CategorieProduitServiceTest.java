@@ -99,8 +99,6 @@ public class CategorieProduitServiceTest {
 	System.out.println(categorie1);
 	System.out.println(" Delete is working correctly...!!");  
 	}
-	//done
-	//done 
-	
+	//donetest
 
 }
