@@ -15,7 +15,7 @@ services:
 
 
   spring_app:
-    image: hazembaccouch/achat
+    image: hazembaccouch/alpine
     container_name: achatspring
     restart: on-failure
     environment:
