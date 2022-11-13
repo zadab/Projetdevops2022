@@ -63,9 +63,9 @@ public class ProduitServiceTest {
         produit.setDateDerniereModification(dateDerniereModification);
         produit.setLibelleProduit("libelleProduit");
         produit.setCodeProduit("code2212222");
-        Produit p = service.addProduit(produit);
-        service.deleteProduit(p.getIdProduit());
-        assertNull(service.retrieveProduit(p.getIdProduit()));
+        Produit p = ps.addProduit(produit);
+        ps.deleteProduit(p.getIdProduit());
+        assertNull(ps.retrieveProduit(p.getIdProduit()));
 
 
     }
