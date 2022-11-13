@@ -69,23 +69,5 @@ public class ProduitServiceTest {
 
 
     }
-    @Order(3)
-	@Test
-    public void retrieveAllProduits() throws ParseException{
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        Date dateCreation = dateFormat.parse("30/08/2021");
-        Date dateDerniereModification =dateFormat.parse("30/09/2022");
-        List<Produit> produits = ps.retrieveAllProduits();
-        int expected = produits.size(); 
-        Produit produit = new Produit();
-        produit.setPrix(11);
-        produit.setDateCreation(dateCreation);
-        produit.setDateDerniereModification(dateDerniereModification);
-        produit.setLibelleProduit("markaa");
-        produit.setCodeProduit("code2212222");
-        Produit p = ps.addProduit(produit);
-        assertEquals(expected + 1,ps.retrieveAllProduits().size());
-        ps.deleteProduit(p.getIdProduit());
 
-    }
 }
