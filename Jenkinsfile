@@ -18,18 +18,18 @@ pipeline {
                 sh 'mvn deploy -DskipTests'
       }
     }*/
-       /*
+       
           stage("build & SonarQube analysis") {
 //          stage ('SonarQube tests') {
             steps {
-                withSonarqubeEnv(installationName:'') {
+                withSonarQubeEnv(installationName:'sonarQube') {
                 //withSonarqubeEnv('sonarQube') { 
                 sh 'mvn sonar:sonar'
                 }
       }
     }
-    */
-          stage("build & SonarQube analysis") {
+    
+        /*  stage("build & SonarQube analysis") {
             agent any
             steps {
               withSonarQubeEnv('sonarQube') {
@@ -37,6 +37,7 @@ pipeline {
               }
             }
           }
+          */
      /*
     stage('Creation livrable'){ 
              steps{ 
