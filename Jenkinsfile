@@ -13,12 +13,12 @@ pipeline {
           }
         }
           
-          stage ('Nexus') {
+          /*stage ('Nexus') {
             steps {
                 sh 'mvn deploy -DskipTests'
       }
-    }
-         /* stage ('SonarQube tests') {
+    }*/
+          stage ('SonarQube tests') {
             steps {
                 withSonarqubeEnv(installationName:'sonarQube') { 
                 sh 'mvn sonar:sonar'
