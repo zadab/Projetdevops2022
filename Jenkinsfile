@@ -12,8 +12,15 @@ pipeline {
 
           }
         }
+          stage ('SonarQube tests') {
+            steps {
+                withSonarQubeEnv(installationName:'sonarQube') { 
+                sh 'mvn sonar:sonar'
+                }
+      }
+    }
      
-     stage('Creation livrable'){ 
+   /* stage('Creation livrable'){ 
              steps{ 
                  sh "mvn clean package"
              }
@@ -23,6 +30,6 @@ pipeline {
              steps{ 
                  sh "mvn compile"
              }
-         }
+         }*/
 }
      }
