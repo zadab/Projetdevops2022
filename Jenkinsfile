@@ -8,7 +8,7 @@ pipeline {
         { 
         steps{ 
             echo 'Pulling...'   
-              git branch: 'ahmed/test', credentialsId: 'ahmed', url: 'https://github.com/YassineGadhoum/devops.git'
+              git branch: 'ahmed/test', credentialsId: 'ahmed', url: 'https://github.com/zadab/Projetdevops2022.git'
 
           }
         }
