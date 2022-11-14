@@ -7,8 +7,8 @@ pipeline {
         stage('Checkout GIT') 
         { 
         steps{ 
-            echo 'Pulling...'   
-              git branch: 'Ahmed-Miladi/test', credentialsId: 'Ahmed-Miladi', url: 'https://github.com/zadab/Projetdevops2022.git'
+            echo 'Pulling...' 
+              git branch: 'Ahmed-Miladi', credentialsId: 'token', url: 'https://github.com/zadab/Projetdevops2022.git'
 
           }
         }
