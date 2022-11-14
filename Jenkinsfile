@@ -19,7 +19,6 @@ pipeline {
       }
     }*/
           stage("build & SonarQube analysis") {
-
 //          stage ('SonarQube tests') {
             steps {
                 withSonarqubeEnv(installationName:'sonarQube') {
