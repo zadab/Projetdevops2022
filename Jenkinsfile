@@ -18,6 +18,7 @@ pipeline {
                 sh 'mvn deploy -DskipTests'
       }
     }*/
+       /*
           stage("build & SonarQube analysis") {
 //          stage ('SonarQube tests') {
             steps {
@@ -27,6 +28,15 @@ pipeline {
                 }
       }
     }
+    */
+          stage("build & SonarQube analysis") {
+            agent any
+            steps {
+              withSonarQubeEnv('My SonarQube Server') {
+                sh 'mvn clean package sonar:sonar'
+              }
+            }
+          }
      /*
     stage('Creation livrable'){ 
              steps{ 
