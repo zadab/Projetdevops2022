@@ -1,0 +1,95 @@
+pipeline {
+          agent any
+          environment
+    {
+      DOCKERHUB_CREDENTIALS = credentials('achat')
+    }
+
+    stages {
+        stage('GIT') {
+            steps {
+                echo 'Pulling...';
+                git branch: 'hazembaccouch',
+                url : 'https://github.com/zadab/Projetdevops2022'
+              
+            }
+        }
+        stage('MNV CLEAN') {
+            
+            steps {
+            sh 'mvn clean'}
+            
+            
+        }
+       stage('compile') {
+            steps {
+                sh 'mvn compile'
+            }
+            
+        }
+        
+        
+        
+        stage('sonar') {
+            steps {
+                sh 'mvn sonar:sonar  -Dsonar.login=admin -Dsonar.password=hazem'
+            }
+        }
+        
+         stage('mockito') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+      
+          stage('NEXUS') {
+            steps {
+                sh 'mvn deploy -DskipTests'
+            }}
+            
+        
+        stage("build image") {
+                steps{
+                    sh 'docker build -t $DOCKERHUB_CREDENTIALS_USR/alpine .'
+                }
+        }
+        
+        
+        
+        
+        stage("Login") {
+            steps{
+                   
+            sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW'
+            }}
+        
+        stage("push") {
+            
+                steps{
+                    
+                      sh 'docker push $DOCKERHUB_CREDENTIALS_USR/alpine'
+                }
+        }
+        stage("dockercompose") {
+                steps{
+                    
+                   sh 'docker-compose up -d'}
+                
+        }
+       
+    
+    
+}
+post {
+        always {
+
+	emailext body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}",
+                recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']],
+                subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}"
+        }
+	
+    }
+
+
+
+}
