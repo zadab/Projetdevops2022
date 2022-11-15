@@ -1,0 +1,95 @@
+pipeline {
+    agent any
+    tools {
+        // Install the Maven version configured as "M3" and add it to the path.
+        maven "M2_HOME"
+    }
+
+
+    stages {
+        stage('Getting the project from GIT') {
+            steps {
+               echo 'Pulling..';
+                git branch: 'wassimchida',
+                url: 'https://github.com/zadab/Projetdevops2022.git';
+            }
+        }
+       
+       
+
+stage('Cleaning the project') {
+             
+             
+            steps {
+                echo 'cleaning project ...'
+                sh 'mvn clean'
+            }
+        }
+       
+       
+
+
+
+
+
+  stage('Code Quality Check via SonarQube') {
+             
+             
+            steps {
+               
+script {
+
+sh '  mvn sonar:sonar -Dsonar.sources=src/main/java -Dsonar.css.node=. -Dsonar.java.binaries=. -Dsonar.host.url=http://192.168.211.30:9000/ -Dsonar.login=admin   -Dsonar.password=sonar'
+
+ 
+}
+               
+            }
+        }
+stage('MVN TEST'){
+            steps{
+                sh 'mvn test '
+            }
+         }
+stage('NEXUS') {
+            steps {
+                sh 'mvn deploy -DskipTests '
+            }
+        }
+
+stage('Build docker image  '){
+
+ steps{
+ 
+ sh 'docker build -t wassimchida/alpine .'
+ 
+ }
+ }
+ stage('Docker login   ') {
+
+ steps {
+ sh 'echo "login Docker ...."'
+sh 'docker login -u wassimchida -p 181JMT2773'
+  }  }
+ stage('Docker push  ') {
+ steps {
+ sh 'echo "Docker is pushing ...."'
+sh 'docker push wassimchida/alpine'
+ }  }
+ stage('Docker compose  ') {
+  steps {
+   sh 'docker-compose up -d'
+  }  } 
+
+
+    }
+  post {
+        always {
+
+	emailext body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}",
+                recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']],
+                subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}"
+        }
+	
+    }  
+}
