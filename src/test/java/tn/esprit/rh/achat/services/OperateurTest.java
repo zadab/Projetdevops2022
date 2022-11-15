@@ -51,9 +51,9 @@ public class OperateurTest {
         List<Operateur> LOperateur = new ArrayList<>();
         for (Long i=1L;i<=10L;i++) {
             operateur.setIdOperateur(i);
-            operateur.setPrenom("Abdelalim");
-            operateur.setNom("Mahfoudh");
-            operateur.setPassword("abdou");
+            operateur.setPrenom("test");
+            operateur.setNom("test");
+            operateur.setPassword("test");
             Operateur op=operateurRepository.save(operateur);
             LOperateur.add(op);
         }
