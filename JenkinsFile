@@ -1,0 +1,77 @@
+pipeline {
+    agent any
+    
+    
+     tools {
+        maven 'M2_HOME'
+
+    }
+    
+     environment {
+        DOCKERHUB_CREDENTIALS = credentials('achat')
+    }
+
+   
+    
+   
+    stages {
+        stage('Checkout GIT') {
+            steps {
+                echo 'Pulling...';
+                git branch: 'fouratlahmar',
+                url: 'https://github.com/zadab/Projetdevops2022.git'
+                
+            }
+          
+        }
+          stage('mv clean & compile') {
+          steps {
+            sh 'mvn clean'
+            sh 'mvn compile'
+          }
+        }
+      
+     stage('Sonarqube') {
+          steps {
+            sh 'mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=fourat22'
+          }
+        }
+     stage('MVN Mockito') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+     stage('Nexus') {
+          steps {
+            sh 'mvn deploy -Dmaven.test.skip=true -e'
+          }
+        }
+        
+     stage('Building Docker Image') {
+                steps{
+                    sh 'docker build -t $DOCKERHUB_CREDENTIALS_USR/achat .'
+                }
+        }
+        
+     stage('DockerHub Log in') {
+                steps{
+                
+                    sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW'
+        }
+     }
+     stage('Docker push') {
+                steps{
+                    
+                    sh 'docker push $DOCKERHUB_CREDENTIALS_USR/achat'
+                }
+        }
+        
+     stage("Docker-compose") {
+                steps{
+                    sh 'docker-compose up -d'
+                }
+        }
+       
+      }
+      
+    }
